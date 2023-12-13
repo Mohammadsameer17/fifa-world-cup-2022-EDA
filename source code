@@ -1,0 +1,94 @@
+import pandas as pd
+import numpy as np
+df=pd.read_csv('D:\\Fifa_world_cup_matches.csv')
+df
+df.columns
+df.head()
+df.tail()
+df.info()
+df.describe()
+df.dtypes
+df.isnull().sum()
+df.duplicated().sum()
+df["date"]=pd.to_datetime(df["date"])
+df['hour'] = pd.to_datetime(df['hour'], format='%H : %M')
+df.info()
+duplicate_rows = df.duplicated()
+duplicate_rows
+duplicate_rows_count = duplicate_rows.sum()
+print('Number of duplicate rows:', duplicate_rows_count)
+import matplotlib.pyplot as plt
+
+#Average possession percentage for team1 and team2:
+df['possession team1'] = df['possession team1'].replace('%', '', regex=True)
+df['possession team1'] = pd.to_numeric(df['possession team1'], errors='coerce', downcast='float')
+df['possession team2'] = df['possession team2'].replace('%', '', regex=True)
+df['possession team2'] = pd.to_numeric(df['possession team2'], errors='coerce', downcast='float')
+
+team1_possession = df["possession team1"]
+team2_possession = df["possession team2"]
+
+plt.bar(["team1", "team2"], [team1_possession.mean(), team2_possession.mean()])
+plt.xlabel("Team")
+plt.ylabel("Average Possession Percentage")
+plt.show()
+
+#Impact of possession in contest on number of goals scored:
+possession_in_contest = df["possession in contest"]
+goals_team1 = df["number of goals team1"]
+goals_team2 = df["number of goals team2"]
+
+plt.scatter(possession_in_contest, goals_team1, label="Team 1")
+plt.scatter(possession_in_contest, goals_team2, label="Team 2")
+plt.xlabel("Possession in Contest (%)")
+plt.ylabel("Number of Goals")
+plt.legend()
+plt.show()
+
+#Comparison of total attempts, on target attempts, and attempts inside the penalty area for team1 and team2
+team1_total_attempts = df["total attempts team1"]
+team2_total_attempts = df["total attempts team2"]
+team1_on_target = df["on target attempts team1"]
+team2_on_target = df["on target attempts team2"]
+team1_penalty_attempts = df["attempts inside the penalty area team1"]
+team2_penalty_attempts = df["attempts inside the penalty area  team2"]
+
+fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+axs[0].bar(["team1", "team2"], [team1_total_attempts.mean(), team2_total_attempts.mean()])
+axs[0].set_title("Total Attempts")
+axs[1].bar(["team1", "team2"], [team1_on_target.mean(), team2_on_target.mean()])
+axs[1].set_title("On Target Attempts")
+axs[2].bar(["team1", "team2"], [team1_penalty_attempts.mean(), team2_penalty_attempts.mean()])
+axs[2].set_title("Attempts Inside Penalty Area")
+plt.show()
+
+#What is the distribution of goals scored by team1 in FIFA 2022 dataset?
+plt.hist(df['number of goals team1'], bins = range(0, df['number of goals team1'].max()+1))
+
+# Add labels and title
+plt.xlabel('Number of Goals Scored')
+plt.ylabel('Frequency')
+plt.title('Distribution of Goals Scored by team1 in FIFA 2022')
+
+# Show plot
+plt.show()
+
+#What is the distribution of goals scored by team2 in FIFA 2022 dataset?
+plt.hist(df['number of goals team2'], bins = range(0, df['number of goals team2'].max()+1))
+
+# Add labels and title
+plt.xlabel('Number of Goals Scored')
+plt.ylabel('Frequency')
+plt.title('Distribution of Goals Scored by team2 in FIFA 2022')
+
+# Show plot
+plt.show()
+
+#CONCLUSION
+
+#In conclusion, the analysis of the FIFA 2022 dataset revealed the following insights:
+
+#On average, both team1 and team2 had similar possession percentages. Possession in contest had a significant impact on the number of goals scored. Team1 and team2 had similar numbers of total attempts, on target attempts, and attempts inside the penalty area. The distribution of goals scored by team1 in the dataset was fairly evenly distributed. It can be inferred that possession and attempts are crucial factors in determining the number of goals scored in a match, however, it is not the only factor, other factors like team strategies, player skills, and luck also play a role.
+
+
+
